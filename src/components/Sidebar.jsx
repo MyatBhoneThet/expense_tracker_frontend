@@ -10,7 +10,7 @@ export default function Sidebar() {
         const fetchProfile = async () => {
             try {
                 const token = localStorage.getItem("token");
-                const res = await axios.get("http://localhost:5000/api/auth/profile", {
+                const res = await axios.get("https://expense-tracker-backend-zn8v.onrender.com/api/auth/profile", {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 setUser(res.data);

@@ -20,7 +20,7 @@ export default function Expenses() {
     useEffect(() => {
         const fetchExpenses = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/expenses', {
+                const res = await axios.get('https://expense-tracker-backend-zn8v.onrender.com/expenses', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setExpenses(res.data);
@@ -39,7 +39,7 @@ export default function Expenses() {
         return;
         }
         try {
-            const res = await axios.post('http://localhost:5000/api/expenses', {
+            const res = await axios.post('https://expense-tracker-backend-zn8v.onrender.com/api/expenses', {
                 title,
                 amount: parseFloat(amount),
                 date,

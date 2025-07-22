@@ -12,7 +12,7 @@ export default function Register() {
     setLoading(true)
     
     try {
-      await axios.post('http://localhost:5000/api/auth/register', form)
+      await axios.post('https://expense-tracker-backend-zn8v.onrender.com/api/auth/register', form)
       alert("Registered! Now login.")
       navigate("/")
     } catch (err) {

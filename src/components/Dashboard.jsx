@@ -12,7 +12,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/income', {
+        const res = await axios.get('https://expense-tracker-backend-zn8v.onrender.com/api/income', {
           headers: { Authorization: `Bearer ${token}` }
         })
         setTransactions(res.data)
@@ -30,7 +30,7 @@ export default function Dashboard() {
   // Function to add new income
   const addIncome = async () => {
     try {
-      const res = await axios.post('http://localhost:5000/api/income',
+      const res = await axios.post('https://expense-tracker-backend-zn8v.onrender.com/api/income',
         { 
           title: 'Salary', 
           amount: 5000, 

@@ -8,6 +8,7 @@ export default function Incomes() {
     const fetchIncomes = async () => {
       try {
         const res = await axios.get('http://localhost:5000/api/income', {
+        // const res = await axios.get('https://expense-tracker-backend-zn8v.onrender.com', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
           }
