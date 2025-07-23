@@ -5,12 +5,13 @@ import axios from "axios";
 export default function Sidebar() {
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
+    const API = import.meta.env.VITE_API_BASE_URL;
 
     useEffect(() => {
         const fetchProfile = async () => {
             try {
                 const token = localStorage.getItem("token");
-                const res = await axios.get("https://expense-tracker-backend-zn8v.onrender.com/api/auth/profile", {
+                const res = await axios.get(`${API}/api/auth/profile`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 setUser(res.data);

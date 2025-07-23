@@ -16,11 +16,12 @@ export default function Expenses() {
     const [loading, setLoading] = useState(true);
     const [chartType, setChartType] = useState('bar'); // 'bar' or 'line'
     const token = localStorage.getItem('token');
+    const API = import.meta.env.VITE_API_BASE_URL;
 
     useEffect(() => {
         const fetchExpenses = async () => {
             try {
-                const res = await axios.get('https://expense-tracker-backend-zn8v.onrender.com/expenses', {
+                const res = await axios.get(`${API}/expenses`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setExpenses(res.data);
@@ -39,7 +40,7 @@ export default function Expenses() {
         return;
         }
         try {
-            const res = await axios.post('https://expense-tracker-backend-zn8v.onrender.com/api/expenses', {
+            const res = await axios.post(`${API}/api/expenses`, {
                 title,
                 amount: parseFloat(amount),
                 date,

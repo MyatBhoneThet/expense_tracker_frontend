@@ -6,13 +6,14 @@ export default function Register() {
   const [form, setForm] = useState({ name: '', email: '', password: '' })
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
+    const API = import.meta.env.VITE_API_BASE_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
     
     try {
-      await axios.post('https://expense-tracker-backend-zn8v.onrender.com/api/auth/register', form)
+      await axios.post(`${API}/api/auth/register`, form)
       alert("Registered! Now login.")
       navigate("/")
     } catch (err) {

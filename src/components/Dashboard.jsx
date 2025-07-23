@@ -7,12 +7,13 @@ export default function Dashboard() {
   const [error, setError] = useState('')
 
   const token = localStorage.getItem('token')
+  const API = import.meta.env.VITE_API_BASE_URL;
 
   // Fetch existing incomes on load
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
-        const res = await axios.get('https://expense-tracker-backend-zn8v.onrender.com/api/income', {
+        const res = await axios.get(`${API}/api/income`, {
           headers: { Authorization: `Bearer ${token}` }
         })
         setTransactions(res.data)
@@ -30,7 +31,7 @@ export default function Dashboard() {
   // Function to add new income
   const addIncome = async () => {
     try {
-      const res = await axios.post('https://expense-tracker-backend-zn8v.onrender.com/api/income',
+      const res = await axios.post(`${API}/api/income`,
         { 
           title: 'Salary', 
           amount: 5000, 

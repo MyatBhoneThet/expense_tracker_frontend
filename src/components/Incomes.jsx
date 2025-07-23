@@ -16,11 +16,12 @@ export default function Income() {
     const [chartType, setChartType] = useState('bar'); // 'bar' or 'line'
 
     const token = localStorage.getItem('token');
+    const API = import.meta.env.VITE_API_BASE_URL;
 
     useEffect(() => {
         const fetchIncomes = async () => {
             try {
-                const res = await axios.get('https://expense-tracker-backend-zn8v.onrender.com/api/income', {
+                const res = await axios.get(`${API}/api/income`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setIncomes(res.data);
@@ -39,7 +40,7 @@ export default function Income() {
             return;
         }
         try {
-            const res = await axios.post('https://expense-tracker-backend-zn8v.onrender.com/api/income', {
+            const res = await axios.post(`${API}/api/income`, {
                 title,
                 amount: parseFloat(amount),
                 date,

@@ -6,13 +6,14 @@ export default function Login() {
     const [form, setForm] = useState({ email: '', password: '' })
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
+    const API = import.meta.env.VITE_API_BASE_URL;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         
         try {
-            const res = await axios.post('https://expense-tracker-backend-zn8v.onrender.com/api/auth/login', form);
+            const res = await axios.post(`${API}/api/auth/login`, form);
             localStorage.setItem('token', res.data.token);
             navigate('/dashboard');
         } catch (err) {

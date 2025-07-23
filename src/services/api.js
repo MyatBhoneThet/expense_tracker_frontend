@@ -3,12 +3,12 @@ import axios from 'axios'
 
 export default function Incomes() {
   const [incomes, setIncomes] = useState([])
+  const API = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
     const fetchIncomes = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/income', {
-        // const res = await axios.get('https://expense-tracker-backend-zn8v.onrender.com', {
+        const res = await axios.get(`${API}/api/income`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
           }
