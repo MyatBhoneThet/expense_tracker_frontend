@@ -21,7 +21,7 @@ export default function Expenses() {
     useEffect(() => {
         const fetchExpenses = async () => {
             try {
-                const res = await axios.get(`${API}/expenses`, {
+                const res = await axios.get(`${API}/api/expense`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setExpenses(res.data);
@@ -40,7 +40,7 @@ export default function Expenses() {
         return;
         }
         try {
-            const res = await axios.post(`${API}/api/expenses`, {
+            const res = await axios.post(`${API}/api/expense`, {
                 title,
                 amount: parseFloat(amount),
                 date,
