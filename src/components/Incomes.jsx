@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Trash2 } from 'lucide-react';
 import {
     BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
     Legend, ResponsiveContainer
@@ -61,6 +62,21 @@ export default function Income() {
         }
     };
 
+    const handleDeleteIncome = async (incomeId) => {
+        if (!confirm('Are you sure you want to delete this income?')) {
+            return;
+        }
+        try {
+            await axios.delete(`${API}/api/income/${incomeId}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setIncomes(incomes.filter(income => income._id !== incomeId));
+        } catch (err) {
+            console.error('Failed to delete income:', err);
+            alert(err.response?.data?.message || "Failed to delete income");
+        }
+    };
+
     const totalIncome = incomes.reduce((sum, income) => sum + income.amount, 0);
 
     // Sort incomes by date for chart (oldest to newest)
@@ -96,8 +112,12 @@ export default function Income() {
                     <div className="bg-white p-6 rounded-lg shadow">
                         <h2 className="text-xl font-bold mb-4">Add New Income</h2>
                         <div className="space-y-4">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Title*</label>
+                                <input
+                                    type="date"
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                                    value={date}
+                                    onChange={(e) => setDate(e.target.value)}
+                                />
                                 <input
                                     type="text"
                                     placeholder="Income title"
@@ -105,9 +125,6 @@ export default function Income() {
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
                                 />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Amount*</label>
                                 <input
                                     type="number"
                                     placeholder="0.00"
@@ -115,18 +132,6 @@ export default function Income() {
                                     value={amount}
                                     onChange={(e) => setAmount(e.target.value)}
                                 />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Date*</label>
-                                <input
-                                    type="date"
-                                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                                    value={date}
-                                    onChange={(e) => setDate(e.target.value)}
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
                                 <select
                                     className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                                     value={selectOption}
@@ -138,17 +143,13 @@ export default function Income() {
                                     <option value="investment">Investment</option>
                                     <option value="other">Other</option>
                                 </select>
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Reference</label>
                                 <input
                                     type="text"
-                                    placeholder="Optional reference"
+                                    placeholder="Description"
                                     className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                                     value={reference}
                                     onChange={(e) => setReference(e.target.value)}
                                 />
-                            </div>
                             <button
                                 className="w-full bg-green-500 hover:bg-green-600 text-white font-medium py-3 px-6 rounded-lg transition-colors"
                                 onClick={handleAddIncome}
@@ -157,6 +158,7 @@ export default function Income() {
                             </button>
                         </div>
                     </div>
+                    
 
                     {/* Recent Incomes */}
                     <div className="bg-white p-6 rounded-lg shadow">
@@ -172,9 +174,18 @@ export default function Income() {
                                         {new Date(income.date).toLocaleDateString()}
                                     </p>
                                 </div>
-                                <span className="text-lg font-semibold text-green-600">
-                                    {income.amount.toLocaleString()}฿
-                                </span>
+                                <div className="flex items-center gap-3">
+                                    <span className="text-lg font-semibold text-green-600">
+                                        {income.amount.toLocaleString()}฿
+                                    </span>
+                                    <button
+                                        onClick={() => handleDeleteIncome(income._id)}
+                                        className="text-black-500 hover:text-red-700 p-1 rounded"
+                                        title="Delete income"
+                                    >
+                                        <Trash2 size={16} />
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     ))}

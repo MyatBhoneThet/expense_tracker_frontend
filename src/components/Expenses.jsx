@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Trash2 } from 'lucide-react';
 import {
     LineChart, Line, BarChart, Bar,
     XAxis, YAxis, Tooltip, Legend,
@@ -56,8 +57,23 @@ export default function Expenses() {
             setCategory('');
             setDescription('');
         } catch (err) {
-            console.error('Failed to add expense:', err);
+            console.error('Failed to add expense:', err.response?.data || err.message || err);
             alert(err.response?.data?.message || 'Failed to add expense');
+        }
+    };
+
+    const handleDeleteExpense = async (expenseId) => {
+        if (!confirm('Are you sure you want to delete this expense?')) {
+            return;
+        }
+        try {
+            await axios.delete(`${API}/api/expense/${expenseId}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setExpenses(expenses.filter(expense => expense._id !== expenseId));
+        } catch (err) {
+            console.error('Failed to delete expense:', err);
+            alert(err.response?.data?.message || "Failed to delete expense");
         }
     };
 
@@ -89,6 +105,12 @@ export default function Expenses() {
                     <h2 className="text-xl font-bold mb-4">Add New Expense</h2>
                     <div className="space-y-4">
                         <input
+                            type="date"
+                            className="w-full p-3 border border-gray-300 rounded-lg"
+                            value={date}
+                            onChange={(e) => setDate(e.target.value)}
+                        />
+                        <input
                             type="text"
                             className="w-full p-3 border border-gray-300 rounded-lg"
                             placeholder="Expense title"
@@ -101,12 +123,6 @@ export default function Expenses() {
                             placeholder="Amount"
                             value={amount}
                             onChange={(e) => setAmount(e.target.value)}
-                        />
-                        <input
-                            type="date"
-                            className="w-full p-3 border border-gray-300 rounded-lg"
-                            value={date}
-                            onChange={(e) => setDate(e.target.value)}
                         />
                         <select
                             className="w-full p-3 border border-gray-300 rounded-lg"
@@ -151,9 +167,18 @@ export default function Expenses() {
                                             {new Date(expense.date).toLocaleDateString()}
                                         </p>
                                     </div>
-                                    <span className="text-lg font-semibold text-red-600">
-                                        {expense.amount.toLocaleString()}฿
-                                    </span>
+                                    <div className="flex items-center gap-3">
+                                        <span className="text-lg font-semibold text-red-600">
+                                            {expense.amount.toLocaleString()}฿
+                                        </span>
+                                        <button
+                                            onClick={() => handleDeleteExpense(expense._id)}
+                                            className="text-black-500 hover:text-red-700 p-1 rounded"
+                                            title="Delete Expense"
+                                        >
+                                            <Trash2 size={16} />
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         ))}
